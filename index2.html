@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <h1>Travel Itinerary</h1>
+    <input type="text" id="fromPlace" placeholder="Starting Point">
+    <input type="text" id="toPlace" placeholder="Destination">
+    <input type="text" id="duration" placeholder="Number of Days">
+    <button id="btn">Get Response</button>
+    <div id="res">  </div>
+
+    <script type ="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://cdn.jsdelivr.net/npm/@google/generative-ai"
+            }
+        }
+    </script>   
+
+
+
+<script type="module">
+  import { GoogleGenerativeAI } from "@google/generative-ai";
+
+  // Fetch your API_KEY
+  const API_KEY = "AIzaSyCAAJZrFqD_5tX6ucmxr5kddwbweptmh0M";
+
+  // Access your API key (see "Set up your API key" above)
+  const genAI = new GoogleGenerativeAI(API_KEY);
+
+  async function run() {
+    let fromPlace =document.getElementById('fromPlace').value
+    let toPlace =document.getElementById('toPlace').value
+
+    let duration =document.getElementById('duration').value
+
+    let promtMsg = `
+    Create a travel itinerary from
+${fromPlace} to ${toPlace} for ${duration} Days 
+   ` 
+     
+
+    console.log('Gemini is working and processing... ')
+
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+  const prompt = promtMsg
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  var convertor  =new showdown.Convertor (),
+  html = convertor.makeHtml(text);
+  document.getElementById('result').innerHTML = html;
+  console.log(text);
+}
+ document.getElementById('btn').addEventListener('click',run)
+  //run();
+  // ...
+
+  const model = genAI.getGenerativeModel({ model: "MODEL_NAME"});
+
+  // ...
+</script>
+
+
+</body>
+</html>
